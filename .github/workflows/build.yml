@@ -1,25 +1,27 @@
 name: Build EXE
 on:
-  workflow_dispatch: # Позволяет запускать сборку вручную
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: setup node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
 
       - name: install Rust stable
         uses: dtolnay/rust-toolchain@stable
 
-      - name: install dependencies
+      - name: build prep
         run: |
           cd frontend
           npm install
+          # Принудительно заменяем команду билда, если она не сохранилась
+          npm pkg set scripts.build="vite build"
           cd ..
 
       - name: build tauri app
@@ -27,8 +29,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tagName: v__VERSION__ # Это создаст релиз
-          releaseName: "Jarvis v__VERSION__"
-          releaseBody: "Сборка JARVIS для Windows"
+          tagName: v1.0.0
+          releaseName: "Jarvis v1.0.0"
           releaseDraft: true
           prerelease: false
