@@ -5,6 +5,8 @@ on:
 jobs:
   build:
     runs-on: windows-latest
+    permissions: # Добавляем права прямо в скрипт
+      contents: write
     steps:
       - uses: actions/checkout@v4
 
@@ -30,10 +32,10 @@ jobs:
         with:
           tagName: v1.0.0
           releaseName: "Jarvis v1.0.0"
-          releaseDraft: true
+          releaseDraft: false # Сразу публикуем, не оставляем в черновиках
           prerelease: false
 
-      - name: Upload Artifacts
+      - name: Upload Artifacts (Запасной вариант)
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -41,4 +43,3 @@ jobs:
           path: |
             target/release/bundle/msi/*.msi
             target/release/bundle/nsis/*.exe
-            target/release/*.exe
