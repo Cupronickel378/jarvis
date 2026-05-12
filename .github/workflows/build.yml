@@ -33,12 +33,12 @@ jobs:
           releaseDraft: true
           prerelease: false
 
-      - name: Upload Artifacts
-        if: always() # Сохранит файлы, даже если создание релиза упадет
+           - name: Upload Artifacts
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: Jarvis-Windows-Build
           path: |
-            src-tauri/target/release/bundle/msi/*.msi
-            src-tauri/target/release/bundle/setup.exe
-            src-tauri/target/release/*.exe
+            target/release/bundle/msi/*.msi
+            target/release/bundle/nsis/*.exe
+            target/release/*.exe
