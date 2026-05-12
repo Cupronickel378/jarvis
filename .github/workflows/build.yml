@@ -20,16 +20,19 @@ jobs:
         run: |
           cd frontend
           npm install
-          # Принудительно заменяем команду билда, если она не сохранилась
           npm pkg set scripts.build="vite build"
           cd ..
 
       - name: build tauri app
-        uses: tauri-apps/tauri-action@v0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          npm install -g @tauri-apps/cli@1.6.0
+          cargo tauri build
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
         with:
-          tagName: v1.0.0
-          releaseName: "Jarvis v1.0.0"
-          releaseDraft: true
-          prerelease: false
+          name: Jarvis-Windows-Build
+          path: |
+            src-tauri/target/release/bundle/msi/*.msi
+            src-tauri/target/release/bundle/setup.exe
+            src-tauri/target/release/*.exe
