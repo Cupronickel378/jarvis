@@ -23,10 +23,11 @@ jobs:
           npm pkg set scripts.build="vite build"
           cd ..
 
+      - name: install tauri cli
+        run: cargo install tauri-cli --version 1.6.0 --locked
+
       - name: build tauri app
-        run: |
-          npm install -g @tauri-apps/cli@1.6.0
-          cargo tauri build
+        run: cargo tauri build
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
